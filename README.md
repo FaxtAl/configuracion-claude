@@ -28,7 +28,7 @@ El instalador además descarga desde su fuente oficial:
 ## Instalación
 
 ```powershell
-git clone <url-de-este-repositorio>
+git clone https://github.com/FaxtAl/configuracion-claude.git
 cd configuracion-claude
 powershell -ExecutionPolicy Bypass -File .\instalar.ps1
 ```
