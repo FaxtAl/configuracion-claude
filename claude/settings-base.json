@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "theme": "dark",
+  "language": "spanish",
+  "permissions": {
+    "allow": [
+      "Bash(node --test*)",
+      "Bash(git diff*)",
+      "Bash(git status*)",
+      "Edit(specs/**)",
+      "Write(specs/**)"
+    ]
+  }
+}

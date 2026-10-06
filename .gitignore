@@ -1,0 +1,9 @@
+# Nunca subir credenciales ni datos personales de Claude
+.credentials.json
+*.local.json
+.env*
+history.jsonl
+
+# Sistema
+.DS_Store
+Thumbs.db
