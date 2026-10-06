@@ -13,13 +13,13 @@ Guía base. Si el proyecto tiene `AGENTS.md` o `CLAUDE.md` con otras reglas, man
 - Diseño responsive: todo se revisa también en móvil (375 px).
 
 ## Backend
-- **Cloudflare Workers + D1** (ej.: catBot):
+- **Cloudflare Workers + D1**:
   - JavaScript puro con módulos ES, `wrangler` como única dependencia de desarrollo.
   - Migraciones SQL numeradas en una carpeta (`0001_init.sql`, ...) y aplicadas con `npx wrangler d1 migrations apply <db>`.
   - Variables no secretas en `wrangler.toml` (`[vars]`); secretos con `wrangler secret put` o `wrangler secret bulk .dev.vars`.
   - Desarrollo: `npx wrangler dev`. Deploy: `npx wrangler deploy`. Logs: `npx wrangler tail <worker>`.
   - Si wrangler da error de certificado (`UNABLE_TO_VERIFY_LEAF_SIGNATURE`): `$env:NODE_OPTIONS = '--use-system-ca'` antes del comando.
-- **PHP + Supabase** (ej.: DimensionTres): endpoints PHP en `api/`, cliente de Supabase en el frontend; los archivos de configuración reales nunca van a git, solo su `*.example.php`.
+- **PHP + Supabase**: endpoints PHP en `api/`, cliente de Supabase en el frontend; los archivos de configuración reales nunca van a git, solo su `*.example.php`.
 
 ## Secretos (innegociable)
 - Nunca en el código, en logs, en commits ni en el chat. Los carga el usuario.
