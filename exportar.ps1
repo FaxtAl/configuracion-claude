@@ -37,6 +37,10 @@ foreach ($archivo in @("claude\agents\planner.md", "claude\commands\coordinador.
 if (Get-Command code -ErrorAction SilentlyContinue) {
     code --list-extensions | Sort-Object | Set-Content -Encoding ascii (Join-Path $repo "vscode\extensiones.txt")
 }
+$settingsVSCode = Join-Path $env:APPDATA "Code\User\settings.json"
+if (Test-Path $settingsVSCode) {
+    Copy-Item -Force $settingsVSCode (Join-Path $repo "vscode\settings.json")
+}
 
 Write-Host "==> Listo. Revisa los cambios con 'git diff' antes de hacer commit." -ForegroundColor Cyan
 Write-Host "    Si creaste una skill propia nueva, agrégala a `$skillsPropias en este script."

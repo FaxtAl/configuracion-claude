@@ -13,11 +13,18 @@ Mi configuración de Claude Code para trabajar con **Spec-Driven Development (SD
 | Hook | `claude/hooks/solo-specs.js` | El `planner` solo puede escribir dentro de `specs/` |
 | Permisos | `claude/settings-base.json` | Idioma español, tests y git de solo lectura, escritura en `specs/` |
 | Extensiones | `vscode/extensiones.txt` | Extensiones de VS Code para frontend y backend |
+| Ajustes de VS Code | `vscode/settings.json` | Formato al guardar, ESLint, iconos, Git Bash, autoguardado… (se fusionan, no se pisan) |
 
 El instalador además descarga desde su fuente oficial:
-- **Skills de terceros:** `find-skills`, `grill-me`, `frontend-design`, `web-design-guidelines`, `systematic-debugging`.
+- **Skills de terceros (starter pack del curso):** `find-skills`, `grill-me`, `frontend-design`, `web-design-guidelines`, `systematic-debugging`.
+- **Skills extra** (se omiten con `-SinExtras`):
+  - Paquete completo de Vercel (`vercel-labs/agent-skills`): React, Next.js, despliegue...
+  - Buenas prácticas: `test-driven-development`, `verification-before-completion`, `requesting-code-review`, `receiving-code-review` (obra), `codebase-design`, `improve-codebase-architecture` (Matt Pocock).
+  - Frontend: `webapp-testing` (Anthropic).
+  - Backend: `node`, `typescript-magician`, `fastify-best-practices` (Matteo Collina), `supabase`, `supabase-postgres-best-practices` (Supabase), `mcp-builder` (Anthropic).
 - **Playwright CLI** y su skill.
-- **MCP:** Chrome DevTools y Context7.
+- **MCP:** Chrome DevTools, Context7, Figma y Supabase (Figma y Supabase: iniciar sesión con `/mcp`).
+- **VS Code en español** (`locale: es`, si no tenías otro idioma configurado).
 
 ## Requisitos
 - Windows con PowerShell.
@@ -33,7 +40,7 @@ cd configuracion-claude
 powershell -ExecutionPolicy Bypass -File .\instalar.ps1
 ```
 
-Opciones: `-SinTerceros`, `-SinMcp`, `-SinVSCode`.
+Opciones: `-SinTerceros`, `-SinExtras`, `-SinMcp`, `-SinVSCode`.
 
 El instalador:
 - **respalda** tu configuración actual en `~/.claude-respaldo-<fecha>` antes de tocar nada;
@@ -41,6 +48,13 @@ El instalador:
 - no copia credenciales, historial ni sesiones.
 
 Después reinicia Claude Code y VS Code.
+
+### GitHub MCP (opcional)
+Necesita un token personal de GitHub (no admite inicio de sesión automático). Créalo en GitHub → Settings → Developer settings → Personal access tokens y ejecuta:
+
+```powershell
+claude mcp add --transport http github -s user https://api.githubcopilot.com/mcp/ --header "Authorization: Bearer TU_TOKEN"
+```
 
 ### Context7 con API key (opcional)
 Saca una key gratis en [context7.com/dashboard](https://context7.com/dashboard) y ejecuta:
@@ -82,4 +96,4 @@ Revisa los cambios y haz commit.
 ## Créditos
 - Flujo SDD, agentes y comandos: adaptados a Claude Code a partir del curso *"El Nuevo Programador"* de **MauroDev** (originalmente para OpenCode).
 - Flujo multi-agente con worktrees y Herdr: inspirado en un video de **Fazt**.
-- Skills de terceros: de sus autores (Vercel, Anthropic, Matt Pocock, Jesse Vincent / obra, Microsoft Playwright), se instalan desde sus repositorios oficiales.
+- Skills de terceros: de sus autores (Vercel, Anthropic, Matt Pocock, Jesse Vincent / obra, Supabase, Matteo Collina, Microsoft Playwright), se instalan desde sus repositorios oficiales.

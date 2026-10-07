@@ -2,11 +2,13 @@
 # Uso:  powershell -ExecutionPolicy Bypass -File .\instalar.ps1
 # Opciones: -SinTerceros (no instala skills de terceros ni Playwright)
 #           -SinMcp      (no configura los servidores MCP)
-#           -SinVSCode   (no instala extensiones de VS Code)
+#           -SinVSCode   (no instala extensiones ni ajustes de VS Code)
+#           -SinExtras   (solo el starter pack del curso, sin las skills extra de frontend/backend)
 param(
     [switch]$SinTerceros,
     [switch]$SinMcp,
-    [switch]$SinVSCode
+    [switch]$SinVSCode,
+    [switch]$SinExtras
 )
 
 $ErrorActionPreference = "Stop"
@@ -75,6 +77,30 @@ if (-not $SinTerceros) {
         npx -y skills add $s[0] -s $s[1] -g -a claude-code -y --copy | Out-Null
     }
 
+    if (-not $SinExtras) {
+        Paso "Instalando skills extra (frontend, backend y buenas prácticas)"
+        $extras = @(
+            @("vercel-labs/agent-skills", "*"),
+            @("anthropics/skills", "webapp-testing"),
+            @("anthropics/skills", "mcp-builder"),
+            @("obra/superpowers", "test-driven-development"),
+            @("obra/superpowers", "verification-before-completion"),
+            @("obra/superpowers", "requesting-code-review"),
+            @("obra/superpowers", "receiving-code-review"),
+            @("mattpocock/skills", "codebase-design"),
+            @("mattpocock/skills", "improve-codebase-architecture"),
+            @("supabase/agent-skills", "supabase"),
+            @("supabase/agent-skills", "supabase-postgres-best-practices"),
+            @("mcollina/skills", "node"),
+            @("mcollina/skills", "typescript-magician"),
+            @("mcollina/skills", "fastify-best-practices")
+        )
+        foreach ($s in $extras) {
+            Write-Host "    $($s[0]) -> $($s[1])"
+            npx -y skills add $s[0] -s $s[1] -g -a claude-code -y --copy | Out-Null
+        }
+    }
+
     Paso "Instalando Playwright CLI y su skill"
     npm install -g @playwright/cli@latest | Out-Null
     playwright-cli install --skills -g | Out-Null
@@ -91,6 +117,14 @@ if (-not $SinMcp -and $hayClaude) {
         claude mcp add --transport http context7 -s user https://mcp.context7.com/mcp | Out-Null
         Aviso "context7 quedó sin API key. Para agregarla: ver README."
     } else { Aviso "context7 ya estaba configurado." }
+    # Figma y Supabase usan inicio de sesión en el navegador (/mcp): no guardan claves aquí.
+    if ($mcpActuales -notmatch "figma") {
+        claude mcp add --transport http figma -s user https://mcp.figma.com/mcp | Out-Null
+    } else { Aviso "figma ya estaba configurado." }
+    if ($mcpActuales -notmatch "supabase") {
+        claude mcp add --transport http supabase -s user https://mcp.supabase.com/mcp | Out-Null
+    } else { Aviso "supabase ya estaba configurado." }
+    Aviso "Figma y Supabase: inicia sesión con /mcp dentro de Claude Code."
 }
 
 # --- Extensiones de VS Code ---
@@ -101,6 +135,12 @@ if (-not $SinVSCode) {
             Write-Host "    $_"
             code --install-extension $_ --force | Out-Null
         }
+
+        Paso "Ajustes de VS Code (se fusionan, no se pisan) e idioma español"
+        $settingsVSCode = Join-Path $env:APPDATA "Code\User\settings.json"
+        node (Join-Path $repo "scripts\fusionar-vscode.js") (Join-Path $repo "vscode\settings.json") $settingsVSCode
+        node (Join-Path $repo "scripts\idioma-vscode.js")
+        Aviso "Cierra VS Code por completo y vuelve a abrirlo para ver el idioma."
     } else { Aviso "No se encontró VS Code ('code'): se omiten las extensiones." }
 }
 
