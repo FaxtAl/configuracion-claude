@@ -27,7 +27,7 @@ El instalador además descarga desde su fuente oficial:
 - **VS Code en español** (`locale: es`, si no tenías otro idioma configurado).
 
 ## Requisitos
-- Windows con PowerShell.
+- Windows con PowerShell, o Linux/macOS con Bash.
 - [Node.js](https://nodejs.org) y [Git](https://git-scm.com).
 - [Claude Code](https://claude.com/claude-code) (CLI o extensión de VS Code).
 - Opcional: [VS Code](https://code.visualstudio.com) y [Herdr](https://herdr.dev).
@@ -41,6 +41,16 @@ powershell -ExecutionPolicy Bypass -File .\instalar.ps1
 ```
 
 Opciones: `-SinTerceros`, `-SinExtras`, `-SinMcp`, `-SinVSCode`.
+
+En **Linux o macOS**:
+
+```bash
+git clone https://github.com/FaxtAl/configuracion-claude.git
+cd configuracion-claude
+./instalar.sh
+```
+
+Opciones: `--sin-terceros`, `--sin-extras`, `--sin-mcp`, `--sin-vscode`.
 
 El instalador:
 - **respalda** tu configuración actual en `~/.claude-respaldo-<fecha>` antes de tocar nada;
